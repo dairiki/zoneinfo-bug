@@ -4,7 +4,13 @@ from zoneinfo import ZoneInfoNotFoundError
 import pytest
 
 
-@pytest.mark.parametrize("key", ["*0800", "*", "0800*", "&0800"])
+CONTROL_CHARS = [chr(n) for n in range(32)]
+
+
+@pytest.mark.parametrize(
+    "key",
+    ["*", "<", ">", ":", '"', "a/b", "a\\b" "|", "?"] + CONTROL_CHARS
+)
 def test_weird_key(key):
     with pytest.raises((ValueError, ZoneInfoNotFoundError)):
         ZoneInfo(key)
